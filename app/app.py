@@ -57,9 +57,14 @@ try:
         st.error("Data file not found. Please ensure 'data/processed/features_engineered.csv' exists.")
         st.stop()
 
-    # SIDEBAR CONTROLS
+    # --- SIDEBAR CONTROLS ---
     st.sidebar.header("Dashboard Settings")
     days_to_show = st.sidebar.slider("Select timeframe (days)", 30, 365, 90)
+    
+    # NEW: CURRENCY CONVERTER SECTION
+    st.sidebar.divider()
+    st.sidebar.header("Currency Converter")
+    eur_amount = st.sidebar.number_input("Enter Amount in EUR", min_value=0.0, value=100.0, step=10.0)
     
     # Get latest data point
     latest_data = df.iloc[-1]
@@ -67,12 +72,17 @@ try:
     current_rate = latest_data['rate']
     ma_30 = latest_data['ma_30']
 
-    # TITLE SECTION 
+    # Calculation for converter
+    gbp_result = eur_amount * current_rate
+    st.sidebar.success(f"{eur_amount:,.2f} EUR = {gbp_result:,.2f} GBP")
+    st.sidebar.caption(f"Using current rate: {current_rate:.4f}")
+
+    # --- TITLE SECTION ---
     st.title("EUR/GBP Exchange Rate Analysis")
     st.write(f"Analyzing historical trends to optimize currency exchange. Last updated: {latest_date}")
     st.divider()
 
-    # METRICS ROW 
+    # --- METRICS ROW ---
     col1, col2, col3 = st.columns(3)
 
     with col1:
@@ -88,7 +98,7 @@ try:
 
     st.divider()
 
-    # CHART SECTION 
+    # --- CHART SECTION ---
     st.subheader(f"Historical Trend (Last {days_to_show} Days)")
     
     fig, ax = plt.subplots(figsize=(12, 5))
@@ -105,15 +115,13 @@ try:
     
     st.pyplot(fig)
 
-    # OPTIMAL TRANSFER ANALYSIS
+    # --- OPTIMAL TRANSFER ANALYSIS ---
     st.divider()
     left_col, right_col = st.columns(2)
 
     with left_col:
         st.subheader("Historical Best Trading Days")
-        # Calculate average rate per day of week
         df['day_name'] = df['date'].dt.day_name()
-        # Order days for logical display
         day_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
         avg_by_day = df.groupby('day_name')['rate'].mean().reindex(day_order)
         
@@ -124,7 +132,6 @@ try:
     with right_col:
         if model is not None:
             st.subheader("AI Model Prediction")
-            # Prepare input data matching feature list
             input_data = pd.DataFrame([latest_data[feature_list]])
             prediction = model.predict(input_data)[0]
             
