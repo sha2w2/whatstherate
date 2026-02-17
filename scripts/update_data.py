@@ -4,26 +4,24 @@ import os
 
 def fetch_and_save():
     ticker = "EURGBP=X"
-    # Download data
-    data = yf.download(ticker, period="1y", interval="1d", auto_adjust=False)
+    print(f"Downloading data for {ticker}...")
     
-    if data.empty:
-        print("Error: No data downloaded. Check ticker or internet connection.")
-        return
-
-    # Reset index to make 'Date' a column
-    data = data.reset_index()
-
-    # FIX: Handle MultiIndex columns (the 'tuple' error)
+    # Download data
+    data = yf.download(ticker, period="1y", interval="1d", progress=False)
+    
+    # FIX: Flatten MultiIndex columns (handling tuples),yfinance returns columns like ('Close', 'EURGBP=X'),select level 0 to get just 'Close'.
     if isinstance(data.columns, pd.MultiIndex):
         data.columns = data.columns.get_level_values(0)
     
-    # Ensure all column names are strings and lowercase
+    # Reset index to make 'Date' a proper column
+    data.reset_index(inplace=True)
+    
+    # Convert all columns to lowercase string (Safe now that tuples are removed)
     data.columns = [str(c).lower() for c in data.columns]
     
-    # Verify the 'close' column exists after renaming
+    # Check if 'close' exists to prevent KeyErrors
     if 'close' not in data.columns:
-        print(f"Error: 'close' column not found. Available columns: {list(data.columns)}")
+        print(f"Error: 'close' column missing. Found: {data.columns.tolist()}")
         return
 
     # Simple feature engineering
