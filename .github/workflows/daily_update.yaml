@@ -35,6 +35,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add data/processed/features_engineered.csv models/*.pkl
+          # Use -f (force) to ensure ignored files can be updated by the bot
+          git add -f data/processed/features_engineered.csv models/exchange_rate_rf_model.pkl models/feature_list.pkl
           git commit -m "Auto-update: market data and model refreshed" || echo "No changes to commit"
           git push

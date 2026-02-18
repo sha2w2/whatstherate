@@ -10,7 +10,6 @@ def fetch_and_save():
     data = yf.download(ticker, period="1y", interval="1d", progress=False)
     
     # 1. FIX: Handle MultiIndex columns (the 'tuple' error)
-    # This selects 'Close' from ('Close', 'EURGBP=X')
     if isinstance(data.columns, pd.MultiIndex):
         data.columns = data.columns.get_level_values(0)
     
