@@ -9,26 +9,27 @@ def fetch_and_save():
     # Download data
     data = yf.download(ticker, period="1y", interval="1d", progress=False)
     
-    # 1. FIX: Handle MultiIndex columns (the 'tuple' error)
+    # FIX: Handle MultiIndex columns (the 'tuple' error)
+    # This transforms ('Close', 'EURGBP=X') into just 'Close'
     if isinstance(data.columns, pd.MultiIndex):
         data.columns = data.columns.get_level_values(0)
     
-    # 2. Reset index to make 'Date' a proper column
+    # Reset index to make 'Date' a proper column
     data.reset_index(inplace=True)
     
-    # 3. Clean column names: convert to string and lowercase safely
+    # Convert all columns to lowercase string safely
     data.columns = [str(c).lower() for c in data.columns]
     
-    # Verify 'close' column exists before doing math
+    # Verify 'close' exists before calculating moving average
     if 'close' not in data.columns:
-        print(f"Error: 'close' column not found. Available: {list(data.columns)}")
+        print(f"Error: 'close' column missing. Found: {list(data.columns)}")
         return
 
-    # 4. Simple feature engineering
+    # Simple feature engineering
     data['ma_30'] = data['close'].rolling(window=30).mean()
     data.rename(columns={'close': 'rate'}, inplace=True)
     
-    # Ensure directory exists before saving
+    # Ensure directory exists
     save_path = 'data/processed/features_engineered.csv'
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
     
