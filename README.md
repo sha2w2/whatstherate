@@ -24,4 +24,36 @@ visual_assets/: Contains a set of PNG visualizations—including historical_tren
 
 <ins> The system successfully navigated deployment environment constraints and achieved a test set Mean Absolute Error (MAE) of 0.00299. </ins>
 
+## Live Application: WhatsTheRate
+The project is deployed as a multi-page interactive web application using Streamlit. It provides a user-friendly interface for non-technical users to interpret complex market data and AI forecasts.
+
+Core Features:
+ * Market Dashboard: Real-time visualization of the EUR/GBP rate vs. its 30-day moving average.
+* AI Price Projections: Next-session forecasts powered by a Random Forest Regressor.
+* Reliability Rating: A custom-built Confidence Score that uses the variance between decision trees to quantify how "sure" the model is about its prediction.
+* Optimal Transfer Strategy: Statistical analysis of historical data to identify the best days of the week for currency exchange.
+
+## Automated Data Pipeline (DevOps)
+This project is fully autonomous. It does not require manual data updates or retraining.
+
+* GitHub Actions: A CI/CD workflow runs every night at midnight (UTC).
+* Auto-Update: The system fetches the latest market data from the Yahoo Finance API, performs feature engineering, and retrains the model.
+* Auto-Push: Updated data and model artifacts are automatically committed back to the repository, ensuring the Streamlit app always displays fresh insights.
+
+## Tech Stack
+* Language: **Python 3.10**
+* Machine Learning: **Scikit-Learn** (Random Forest Regressor)
+* Data Handling: **Pandas, NumPy, yfinance**
+* Frontend: **Streamlit**
+* DevOps: **GitHub Actions (YAML)**
+* Environment: **Virtualenv / Pip**
+
+**Feature Engineering**
+To move beyond simple price tracking, the AI model uses several technical indicators to capture market momentum:
+
+* MA-30: 30-day Moving Average to identify long-term trends.
+* Daily Returns: Calculated percentage change to capture price momentum.
+* Volatility: 5-day rolling standard deviation to assess market "fear."
+* Lagged Rates: Yesterday's closing price to provide immediate context for the model.
+
   
