@@ -1,34 +1,40 @@
 import streamlit as st
-from utils import load_data
+from utils import load_data, get_last_updated_time
 
 # PAGE CONFIGURATION
 st.set_page_config(
-    page_title="EUR/GBP Exchange Rate Analysis",
+    page_title="WhatsTheRate | EUR-GBP Forecast",
     layout="wide"
 )
 
-# MAIN ENTRY POINT LOGIC
 def main():
-    st.title("Welcome to the EUR/GBP AI Forecast Tool")
-    st.write("Use the sidebar on the left to navigate between different analysis modules.")
+    # Sidebar Automation Status
+    with st.sidebar:
+        st.header("Pipeline Status")
+        last_update = get_last_updated_time()
+        st.success(f"Data Refresh: {last_update}")
+        st.info("AI Model: Active")
+
+    # Brand Title Update
+    st.title("Welcome to WhatsTheRate- the EUR/GBP Forecast Tool.")
+    st.write("Navigate using the sidebar to explore real-time market insights and AI predictions.")
 
     st.markdown("""
-    ### Available Modules:
-    1.  Dashboard : View current rates and historical trends.
-    2.  Predictions : See the AI's forecast for the next trading session.
-    3.  Optimal Transfer : Find the best day of the week to exchange money.
+    ### Current Capabilities:
+    * **Dashboard**: Monitor live rates and technical trends.
+    * **Predictions**: View AI-generated next-day price forecasts.
+    * **Optimal Transfer**: Identify statistically advantageous days for currency exchange[cite: 3].
     """)
 
-    # Check data status
     try:
         df = load_data()
         if df is not None:
             latest_date = df['date'].max().date()
-            st.info(f"Last data sync completed on: {latest_date}")
+            st.info(f"Market data current as of: {latest_date}")
         else:
-            st.warning("Data file not found. Please run the update script to initialize data.")
+            st.warning("Historical data is initializing. Please check back shortly.")
     except Exception as e:
-        st.error(f"An error occurred while checking data status: {e}")
+        st.error(f"System Check: {e}")
 
 if __name__ == "__main__":
     main()

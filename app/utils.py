@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import joblib
 import os
+import datetime
 
 @st.cache_data
 def load_data():
@@ -19,6 +20,14 @@ def load_model():
     if not os.path.exists(model_path) or not os.path.exists(features_path):
         return None, None
     return joblib.load(model_path), joblib.load(features_path)
+
+def get_last_updated_time():
+    """Returns the last modified time of the processed data file."""
+    data_path = 'data/processed/features_engineered.csv'
+    if os.path.exists(data_path):
+        mtime = os.path.getmtime(data_path)
+        return datetime.datetime.fromtimestamp(mtime).strftime('%Y-%m-%d %H:%M')
+    return "Not Available"
 
 def get_recommendation(current, ma):
     diff = (current - ma) / ma
