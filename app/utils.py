@@ -22,7 +22,6 @@ def load_model():
     return joblib.load(model_path), joblib.load(features_path)
 
 def get_last_updated_time():
-    """Returns the last modified time of the processed data file."""
     data_path = 'data/processed/features_engineered.csv'
     if os.path.exists(data_path):
         mtime = os.path.getmtime(data_path)

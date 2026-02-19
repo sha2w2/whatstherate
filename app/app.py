@@ -1,7 +1,6 @@
 import streamlit as st
 from utils import load_data, get_last_updated_time
 
-# PAGE CONFIGURATION
 st.set_page_config(
     page_title="WhatsTheRate | EUR-GBP Forecast",
     layout="wide"
@@ -12,29 +11,25 @@ def main():
     with st.sidebar:
         st.header("Pipeline Status")
         last_update = get_last_updated_time()
-        st.success(f"Data Refresh: {last_update}")
+        st.success(f"Last Sync: {last_update}")
         st.info("AI Model: Active")
 
-    # Brand Title Update
     st.title("Welcome to WhatsTheRate- the EUR/GBP Forecast Tool.")
-    st.write("Navigate using the sidebar to explore real-time market insights and AI predictions.")
+    st.write("Use the sidebar to explore real-time market insights, AI predictions, and transfer strategies.")
 
     st.markdown("""
-    ### Current Capabilities:
-    * **Dashboard**: Monitor live rates and technical trends.
-    * **Predictions**: View AI-generated next-day price forecasts.
-    * **Optimal Transfer**: Identify statistically advantageous days for currency exchange[cite: 3].
+    ---
+    ### Navigation Guide:
+    * **1_Dashboard**: Visual trends and current market status.
+    * **2_Predictions**: AI-powered forecasts with confidence ratings.
+    * **3_Optimal_Transfer**: Data-driven analysis of the best days to exchange.
     """)
 
-    try:
-        df = load_data()
-        if df is not None:
-            latest_date = df['date'].max().date()
-            st.info(f"Market data current as of: {latest_date}")
-        else:
-            st.warning("Historical data is initializing. Please check back shortly.")
-    except Exception as e:
-        st.error(f"System Check: {e}")
+    df = load_data()
+    if df is not None:
+        st.success("System operational. Data is up to date.")
+    else:
+        st.warning("Initializing data... If this is a new deployment, please wait for the first automated run.")
 
 if __name__ == "__main__":
     main()
