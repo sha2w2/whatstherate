@@ -35,7 +35,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          # -f forces the add of models and data even if rules conflict
+          # -f forces the update even if .gitignore tries to block .pkl files
           git add -f data/processed/features_engineered.csv models/*.pkl
           git commit -m "Auto-update: market data and model refreshed" || echo "No changes to commit"
           git push

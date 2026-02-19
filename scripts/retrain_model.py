@@ -9,12 +9,12 @@ def retrain():
         print(f"Error: {data_path} not found. Run update_data.py first.")
         return
 
-    # Load and drop the NaN rows created by the 30-day moving average
+    # Load data and drop NaN rows created by the moving average
     df = pd.read_csv(data_path).dropna()
     
     features = ['ma_30'] 
     X = df[features]
-    # Prediction target is the next day's rate
+    # Target is the rate shifted by one day (predicting tomorrow)
     y = df['rate'].shift(-1).fillna(df['rate'])
     
     model = RandomForestRegressor(n_estimators=100, random_state=42)
@@ -23,6 +23,7 @@ def retrain():
     # Ensure models directory exists
     os.makedirs('models', exist_ok=True)
     
+    # Save both the model and the feature list for the app to use
     joblib.dump(model, 'models/exchange_rate_rf_model.pkl')
     joblib.dump(features, 'models/feature_list.pkl')
     print("Model retrained and saved successfully.")
