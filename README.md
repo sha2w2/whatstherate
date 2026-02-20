@@ -1,4 +1,5 @@
 # What's the rate?
+*VISIT* https://whatstherate.streamlit.app/ 
 ## OBJECTIVES:
 - To be able to predict the ever-changing EUR-GBP exchange rate with:
   **AT LEAST** 65% directional accuracy- very important
