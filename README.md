@@ -57,4 +57,17 @@ To move beyond simple price tracking, the AI model uses several technical indica
 * Volatility: 5-day rolling standard deviation to assess market "fear."
 * Lagged Rates: Yesterday's closing price to provide immediate context for the model.
 
+## License Notice
+This is **proprietary software** owned by sha2w2.
+
+You may **view** this code for learning purposes only.
+
+X No commercial use
+X No modifications
+X No derivatives
+X No use without permission
+
+See the [LICENSE](LICENSE) file for complete terms.
+
+For any use beyond viewing, please contact sha2w2.
   
