@@ -28,8 +28,11 @@ def get_last_updated_time():
         return datetime.datetime.fromtimestamp(mtime).strftime('%Y-%m-%d %H:%M')
     return "Not Available"
 
-def get_recommendation(current, ma):
-    diff = (current - ma) / ma
-    if diff < -0.01: return "STRONG BUY", "Rate is significantly below 30-day average."
-    if diff > 0.01: return "WAIT", "Rate is currently above 30-day average."
-    return "NEUTRAL", "Rate is within expected range."
+def convert_rate(value, direction="EUR_GBP"):
+    """
+    Converts the exchange rate based on the selected direction.
+    Base data is EUR -> GBP. For GBP -> EUR, returns the reciprocal.
+    """
+    if direction == "GBP_EUR":
+        return 1.0 / value if value != 0 else 0
+    return value
